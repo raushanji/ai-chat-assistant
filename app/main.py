@@ -1,14 +1,23 @@
 from fastapi import FastAPI
+from app.core.config import settings
+from app.api.chat import router as chat_router
 
 app = FastAPI(
-    title="AI Chat Assistant",
+    title=settings.APP_NAME,
     version="1.0.0"
+)
+
+app.include_router(
+    chat_router,
+    prefix="/chat",
+    tags=["chat"]
 )
 
 @app.get("/")
 async def root():
     return {
-        "message": "AI Chat Assistant Running"
+        "app": settings.APP_NAME,
+        "environment": settings.ENVIRONMENT
     }
 
 @app.get("/health")
